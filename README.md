@@ -20,3 +20,8 @@ VITE_SERVER = http://server:8000
 
 
 run docker compose up 
+
+
+Sign up in INCOGNTO MODE and chat
+
+url-- http://localhost:3000
