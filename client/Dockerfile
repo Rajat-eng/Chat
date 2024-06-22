@@ -1,33 +1,27 @@
-# Stage-1 & spacify a name 'builder'
-FROM  node:latest AS builder
+# Stage 1: Build the React Vite application
+FROM node:latest AS builder
 
-# Create a directory  and go to directory 
 WORKDIR /app
 
-# Copy the package.json file to my current directory for install necessary dependence  
 COPY package.json .
 
-# Install the dependence
 RUN npm install
 
-RUN npm i -g serve
-# Copy other file to my current directory
 COPY . .
 
-# Build optimise static file
 RUN npm run build
 
+# Stage 2: Serve the React Vite application with NGINX
+FROM nginx:1.25.2-alpine-slim
 
-EXPOSE 3000
-# Stage-2
-# FROM nginx:1.25.2-alpine-slim
+# Copy the built static files from the builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# # Copy static file to my nignx folder for serve static contain
-# COPY --from=builder /app/build /usr/share/nginx/html
+# Copy the NGINX configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# # Open the port for react
-# EXPOSE 80
+# Expose port 80
+EXPOSE 80
 
-# # Run nginx in foreground
-CMD [ "serve", "-s", "dist"]
-
+# Run NGINX in the foreground
+CMD ["nginx", "-g", "daemon off;"]
