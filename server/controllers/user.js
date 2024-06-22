@@ -36,8 +36,6 @@ const newUser = TryCatch(async (req, res, next) => {
     avatar,
   });
 
-  console.log(user);
-
   sendToken(res, user, 201, "User created");
 });
 

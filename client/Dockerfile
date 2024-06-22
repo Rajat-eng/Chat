@@ -10,21 +10,24 @@ COPY package.json .
 # Install the dependence
 RUN npm install
 
+RUN npm i -g serve
 # Copy other file to my current directory
 COPY . .
 
 # Build optimise static file
 RUN npm run build
 
+
+EXPOSE 3000
 # Stage-2
-FROM nginx:1.25.2-alpine-slim
+# FROM nginx:1.25.2-alpine-slim
 
-# Copy static file to my nignx folder for serve static contain
-COPY --from=builder /app/build /usr/share/nginx/html
+# # Copy static file to my nignx folder for serve static contain
+# COPY --from=builder /app/build /usr/share/nginx/html
 
-# Open the port for react
-EXPOSE 80
+# # Open the port for react
+# EXPOSE 80
 
-# Run nginx in foreground
-CMD ["nginx", "-g", "daemon off;"]
+# # Run nginx in foreground
+CMD [ "serve", "-s", "dist"]
 
